@@ -1441,7 +1441,7 @@ def handle_message(message):
     message_id = message["message_id"]
     first_name = message["from"].get("first_name", "User")
 
-    if text == "🔙 BACK" and user_id == ADMIN_ID:
+    if "BACK" in text.upper() and user_id == ADMIN_ID:
         send_message(chat_id, "❌ <b>Action Cancelled!</b>", reply_markup=get_main_keyboard(user_id)) 
         if user_id in user_states: del user_states[user_id]
         send_message(chat_id, get_owner_panel_text(), reply_markup=get_admin_inline_keyboard())
