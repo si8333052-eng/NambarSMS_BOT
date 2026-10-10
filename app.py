@@ -10,7 +10,6 @@ import threading
 import firebase_admin
 from firebase_admin import credentials, firestore
 from flask import Flask # <-- Render এর জন্য যোগ করা হলো
-
 # ==========================================
 # Configuration
 # ==========================================
@@ -18,7 +17,10 @@ BOT_TOKEN = "8604617628:AAFKtdLBP48TyLoOE_UR3pK8D7dn4-t5iOY"
 ADMIN_ID = 6560485203
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/"
 BOT_USERNAME = ""
-
+flask_app = Flask(__name__)
+@flask_app.route('/')
+def home():
+    return "Bot is Running!"
 # 2oo9 API Configuration
 API_2OO9_BASE = "https://api.2oo9.cloud/MXS47FLFX0U/tnevs/@public/api"
 API_2OO9_KEY_DEFAULT = "MHF5UTYD3L7"
