@@ -2243,22 +2243,17 @@ def handle_callback(callback_query):
 # ==========================================
 # Main
 # ==========================================
-def main():
+def run_bot_polling():
     global BOT_USERNAME
-    
     load_local_data()
     init_sqlite()
     init_firebase_from_file()
-    
     BOT_USERNAME = get_bot_info()
     set_bot_commands()
-    
     threading.Thread(target=voltx_console_listener, daemon=True).start()
     threading.Thread(target=voltx_sms_listener, daemon=True).start()
     threading.Thread(target=auto_cache_menu_thread, daemon=True).start()
-    
-    print(f"Bot @{BOT_USERNAME} is running with Voltx, DXA Control & OTP Forwarding...")
-    
+    print(f"Bot @{BOT_USERNAME} is running...")
     offset = None
     while True:
         try:
@@ -2267,12 +2262,12 @@ def main():
             if res.get("ok"):
                 for update in res["result"]:
                     offset = update["update_id"] + 1
-                    if "message" in update: 
-                        threading.Thread(target=handle_message, args=(update["message"],)).start()
-                    elif "callback_query" in update: 
-                        threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
+                    if "message" in update: threading.Thread(target=handle_message, args=(update["message"],)).start()
+                    elif "callback_query" in update: threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
         except Exception as e:
             time.sleep(3)
 
 if __name__ == "__main__":
-    main()
+    threading.Thread(target=run_bot_polling, daemon=True).start()
+    port = int(os.environ.get("PORT", 10000))
+    flask_app.run(host='0.0.0.0', port=port)
