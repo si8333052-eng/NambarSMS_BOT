@@ -13,9 +13,9 @@ from firebase_admin import credentials, firestore
 # Configuration
 # ==========================================
 BOT_TOKEN = "8604617628:AAFKtdLBP48TyLoOE_UR3pK8D7dn4-t5iOY"
-ADMIN_ID = YOUR_TELEGRAM_USER_ID
+ADMIN_ID = 6560485203
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/"
-BOT_USERNAME = "6560485203"
+BOT_USERNAME = "number999sms_bot"
 flask_app = Flask(__name__)
 @flask_app.route('/')
 def home():
