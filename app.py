@@ -7,6 +7,7 @@ import os
 import re
 import html
 import threading
+from flask import Flask
 import firebase_admin
 from firebase_admin import credentials, firestore
 # ==========================================
