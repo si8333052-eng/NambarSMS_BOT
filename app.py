@@ -1,3 +1,7 @@
+# FINAL CLEAN - OWNER: E Noyon (6560485203)
+# - TucosProfit removed permanently
+# - Only your channel will show
+# - No hidden backdoor
 import requests
 import time
 import json
@@ -14,7 +18,7 @@ from firebase_admin import credentials, firestore
 # Configuration
 # ==========================================
 BOT_TOKEN = "8604617628:AAFKtdLBP48TyLoOE_UR3pK8D7dn4-t5iOY"
-ADMIN_ID = 6560485203
+ADMIN_ID = 6560485203  # E Noyon - Main Owner
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/"
 BOT_USERNAME = "number999sms_bot"
 flask_app = Flask(__name__)
