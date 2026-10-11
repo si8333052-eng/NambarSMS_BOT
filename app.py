@@ -1,68 +1,36 @@
-# FINAL CLEAN - OWNER: E Noyon (6560485203)
-# - TucosProfit removed permanently
-# - Only your channel will show
-# - No hidden backdoor
 import requests
 import time
 import json
 import random
 import sqlite3
 import os
+
+# AUTO DELETE A-TOOLS X channel file if present
+import os as _os
+try:
+    if _os.path.exists("bot_data.json"):
+        with open("bot_data.json","r",encoding="utf-8", errors="ignore") as _f:
+            _c = _f.read()
+        if "A_TOOLS" in _c or "a_tools" in _c.lower() or "your_default" in _c.lower():
+            _os.remove("bot_data.json")
+            print("CLEANED bot_data.json containing A-TOOLS/your_default")
+except Exception as _e:
+    print(f"Clean: {_e}")
+
 import re
 import html
 import threading
-from flask import Flask
-
-# ===== AUTO CLEAN FOR FREE PLAN USERS - No Shell Needed =====
-try:
-    if os.path.exists("bot_data.json"):
-        with open("bot_data.json","r",encoding="utf-8", errors="ignore") as jf:
-            content = jf.read()
-            if "TucosProfit" in content or "tucos" in content.lower():
-                os.remove("bot_data.json")
-                print("CLEANED: Old bot_data.json with TucosProfit deleted!")
-except Exception as e:
-    print(f"Clean check: {e}")
-    try:
-        if os.path.exists("bot_data.json"):
-            os.remove("bot_data.json")
-    except:
-        pass
-# ============================================================
-
 import firebase_admin
 from firebase_admin import credentials, firestore
+
 # ==========================================
 # Configuration
 # ==========================================
 BOT_TOKEN = "8604617628:AAFKtdLBP48TyLoOE_UR3pK8D7dn4-t5iOY"
-ADMIN_ID = 6560485203  # E Noyon - Main Owner
+ADMIN_ID = 6560485203
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/"
-BOT_USERNAME = "number999sms_bot"
-flask_
-# --- FIX A-TOOLS X channel (your request) ---
-try:
-    bot_settings["main_channel_link"] = ""
-    bot_settings["w_group"] = ""
-    force_join_channels = [c for c in force_join_channels if "A_TOOLS" not in str(c) and "a_tools" not in str(c).lower()]
-    # clean json file
-    if os.path.exists("bot_data.json"):
-        import json as _jc
-        with open("bot_data.json","r",encoding="utf-8") as jf:
-            _data = _jc.load(jf)
-        if "bot_settings" in _data:
-            _data["bot_settings"]["main_channel_link"] = ""
-        _data["force_join_channels"] = [c for c in _data.get("force_join_channels",[]) if "A_TOOLS" not in str(c)]
-        with open("bot_data.json","w",encoding="utf-8") as jf:
-            _jc.dump(_data, jf, ensure_ascii=False, indent=2)
-except Exception as e:
-    print(f"A-TOOLS fix: {e}")
-# --- END FIX ---
+BOT_USERNAME = ""
 
-app = Flask(__name__)
-@flask_app.route('/')
-def home():
-    return "Bot is Running!"
 # 2oo9 API Configuration
 API_2OO9_BASE = "https://api.2oo9.cloud/MXS47FLFX0U/tnevs/@public/api"
 API_2OO9_KEY_DEFAULT = "MHF5UTYD3L7"
@@ -1483,7 +1451,7 @@ def handle_message(message):
     message_id = message["message_id"]
     first_name = message["from"].get("first_name", "User")
 
-    if "BACK" in text.upper() and user_id == ADMIN_ID:
+    if text == "🔙 BACK" and user_id == ADMIN_ID:
         send_message(chat_id, "❌ <b>Action Cancelled!</b>", reply_markup=get_main_keyboard(user_id)) 
         if user_id in user_states: del user_states[user_id]
         send_message(chat_id, get_owner_panel_text(), reply_markup=get_admin_inline_keyboard())
@@ -2286,17 +2254,22 @@ def handle_callback(callback_query):
 # ==========================================
 # Main
 # ==========================================
-def run_bot_polling():
+def main():
     global BOT_USERNAME
+    
     load_local_data()
     init_sqlite()
     init_firebase_from_file()
+    
     BOT_USERNAME = get_bot_info()
     set_bot_commands()
+    
     threading.Thread(target=voltx_console_listener, daemon=True).start()
     threading.Thread(target=voltx_sms_listener, daemon=True).start()
     threading.Thread(target=auto_cache_menu_thread, daemon=True).start()
-    print(f"Bot @{BOT_USERNAME} is running...")
+    
+    print(f"Bot @{BOT_USERNAME} is running with Voltx, DXA Control & OTP Forwarding...")
+    
     offset = None
     while True:
         try:
@@ -2305,12 +2278,12 @@ def run_bot_polling():
             if res.get("ok"):
                 for update in res["result"]:
                     offset = update["update_id"] + 1
-                    if "message" in update: threading.Thread(target=handle_message, args=(update["message"],)).start()
-                    elif "callback_query" in update: threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
+                    if "message" in update: 
+                        threading.Thread(target=handle_message, args=(update["message"],)).start()
+                    elif "callback_query" in update: 
+                        threading.Thread(target=handle_callback, args=(update["callback_query"],)).start()
         except Exception as e:
             time.sleep(3)
 
 if __name__ == "__main__":
-    threading.Thread(target=run_bot_polling, daemon=True).start()
-    port = int(os.environ.get("PORT", 10000))
-    flask_app.run(host='0.0.0.0', port=port)
+    main()
