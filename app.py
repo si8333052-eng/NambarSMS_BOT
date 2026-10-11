@@ -12,6 +12,24 @@ import re
 import html
 import threading
 from flask import Flask
+
+# ===== AUTO CLEAN FOR FREE PLAN USERS - No Shell Needed =====
+try:
+    if os.path.exists("bot_data.json"):
+        with open("bot_data.json","r",encoding="utf-8", errors="ignore") as jf:
+            content = jf.read()
+            if "TucosProfit" in content or "tucos" in content.lower():
+                os.remove("bot_data.json")
+                print("CLEANED: Old bot_data.json with TucosProfit deleted!")
+except Exception as e:
+    print(f"Clean check: {e}")
+    try:
+        if os.path.exists("bot_data.json"):
+            os.remove("bot_data.json")
+    except:
+        pass
+# ============================================================
+
 import firebase_admin
 from firebase_admin import credentials, firestore
 # ==========================================
